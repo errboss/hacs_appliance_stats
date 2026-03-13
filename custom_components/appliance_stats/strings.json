@@ -1,0 +1,58 @@
+{
+  "title": "Appliance Stats",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add appliance runtime tracker",
+        "description": "Track appliance runtime from a power sensor and energy consumption from a selected energy sensor.",
+        "data": {
+          "name": "Appliance name",
+          "source_entity": "Power sensor entity_id",
+          "energy_entity": "Energy sensor entity_id",
+          "power_threshold": "Active above (W)",
+          "delay_on": "Delay before active (seconds)",
+          "delay_off": "Delay before inactive (seconds)",
+          "update_interval": "Update interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "name_required": "Name is required.",
+      "entity_not_found": "The source entity was not found.",
+      "sensor_required": "The source entity must be a sensor.",
+      "already_configured": "This sensor is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Adjust runtime thresholds",
+        "data": {
+          "energy_entity": "Energy sensor entity_id",
+          "power_threshold": "Active above (W)",
+          "delay_on": "Delay before active (seconds)",
+          "delay_off": "Delay before inactive (seconds)",
+          "update_interval": "Update interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "active": {
+        "name": "Active"
+      }
+    },
+    "sensor": {
+      "runtime_total": {
+        "name": "Runtime total"
+      },
+      "energy_active_total": {
+        "name": "Energy active total"
+      },
+      "runs_total": {
+        "name": "Runs total"
+      }
+    }
+  }
+}

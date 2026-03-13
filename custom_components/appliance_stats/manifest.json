@@ -1,0 +1,11 @@
+{
+  "domain": "appliance_stats",
+  "name": "Appliance Stats",
+  "version": "0.2.5",
+  "documentation": "https://github.com/errboss/hacs_appliance_stats/tree/main",
+  "issue_tracker": "https://github.com/errboss/hacs_appliance_stats/issues",
+  "config_flow": true,
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "requirements": []
+}
