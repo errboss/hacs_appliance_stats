@@ -23,7 +23,6 @@ from .const import (
     DOMAIN,
 )
 
-
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_NAME): str,
@@ -51,9 +50,15 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
                 }
             }
         ),
-        vol.Optional(CONF_POWER_THRESHOLD, default=DEFAULT_POWER_THRESHOLD): vol.Coerce(float),
-        vol.Optional(CONF_DELAY_ON, default=DEFAULT_DELAY_ON): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
-        vol.Optional(CONF_DELAY_OFF, default=DEFAULT_DELAY_OFF): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+        vol.Optional(CONF_POWER_THRESHOLD, default=DEFAULT_POWER_THRESHOLD): vol.Coerce(
+            float
+        ),
+        vol.Optional(CONF_DELAY_ON, default=DEFAULT_DELAY_ON): vol.All(
+            vol.Coerce(int), vol.Range(min=0, max=3600)
+        ),
+        vol.Optional(CONF_DELAY_OFF, default=DEFAULT_DELAY_OFF): vol.All(
+            vol.Coerce(int), vol.Range(min=0, max=3600)
+        ),
         vol.Optional(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL): vol.All(
             vol.Coerce(int), vol.Range(min=5, max=3600)
         ),
@@ -74,6 +79,7 @@ class ApplianceStatsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             source_entity = user_input[CONF_SOURCE_ENTITY].strip()
             energy_entity = user_input[CONF_ENERGY_ENTITY].strip()
             name = user_input[CONF_NAME].strip()
+
             source_state = self.hass.states.get(source_entity)
             energy_state = self.hass.states.get(energy_entity)
 
@@ -100,20 +106,22 @@ class ApplianceStatsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     },
                 )
 
-        return self.async_show_form(step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors)
+        return self.async_show_form(
+            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+        )
 
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
         """Return the options flow handler."""
-        return ApplianceStatsOptionsFlow(config_entry)
+        return ApplianceStatsOptionsFlow()
 
 
 class ApplianceStatsOptionsFlow(config_entries.OptionsFlow):
     """Handle options for Appliance Stats."""
 
-    def __init__(self, config_entry) -> None:
-        self.config_entry = config_entry
+    def __init__(self) -> None:
+        """Initialize options flow."""
 
     async def async_step_init(self, user_input: dict | None = None):
         """Manage the integration options."""
@@ -122,6 +130,7 @@ class ApplianceStatsOptionsFlow(config_entries.OptionsFlow):
 
         data = {**self.config_entry.data, **self.config_entry.options}
         energy_entity = data.get(CONF_ENERGY_ENTITY)
+
         energy_selector = selector(
             {
                 "entity": {
@@ -134,18 +143,30 @@ class ApplianceStatsOptionsFlow(config_entries.OptionsFlow):
                 }
             }
         )
+
         schema_fields = {
-            (vol.Required(CONF_ENERGY_ENTITY, default=energy_entity) if energy_entity else vol.Required(CONF_ENERGY_ENTITY)): energy_selector,
-            vol.Optional(CONF_POWER_THRESHOLD, default=data.get(CONF_POWER_THRESHOLD, DEFAULT_POWER_THRESHOLD)): vol.Coerce(float),
-            vol.Optional(CONF_DELAY_ON, default=data.get(CONF_DELAY_ON, DEFAULT_DELAY_ON)): vol.All(
-                vol.Coerce(int), vol.Range(min=0, max=3600)
-            ),
-            vol.Optional(CONF_DELAY_OFF, default=data.get(CONF_DELAY_OFF, DEFAULT_DELAY_OFF)): vol.All(
-                vol.Coerce(int), vol.Range(min=0, max=3600)
-            ),
-            vol.Optional(CONF_UPDATE_INTERVAL, default=data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)): vol.All(
-                vol.Coerce(int), vol.Range(min=5, max=3600)
-            ),
+            (
+                vol.Required(CONF_ENERGY_ENTITY, default=energy_entity)
+                if energy_entity
+                else vol.Required(CONF_ENERGY_ENTITY)
+            ): energy_selector,
+            vol.Optional(
+                CONF_POWER_THRESHOLD,
+                default=data.get(CONF_POWER_THRESHOLD, DEFAULT_POWER_THRESHOLD),
+            ): vol.Coerce(float),
+            vol.Optional(
+                CONF_DELAY_ON,
+                default=data.get(CONF_DELAY_ON, DEFAULT_DELAY_ON),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            vol.Optional(
+                CONF_DELAY_OFF,
+                default=data.get(CONF_DELAY_OFF, DEFAULT_DELAY_OFF),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            vol.Optional(
+                CONF_UPDATE_INTERVAL,
+                default=data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=5, max=3600)),
         }
+
         schema = vol.Schema(schema_fields)
         return self.async_show_form(step_id="init", data_schema=schema)
