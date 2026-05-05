@@ -54,13 +54,13 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
             float
         ),
         vol.Optional(CONF_DELAY_ON, default=DEFAULT_DELAY_ON): vol.All(
-            vol.Coerce(int), vol.Range(min=0, max=3600)
+            vol.Coerce(int), vol.Range(min=0, max=36000)
         ),
         vol.Optional(CONF_DELAY_OFF, default=DEFAULT_DELAY_OFF): vol.All(
-            vol.Coerce(int), vol.Range(min=0, max=3600)
+            vol.Coerce(int), vol.Range(min=0, max=36000)
         ),
         vol.Optional(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL): vol.All(
-            vol.Coerce(int), vol.Range(min=5, max=3600)
+            vol.Coerce(int), vol.Range(min=5, max=36000)
         ),
     }
 )
@@ -157,15 +157,15 @@ class ApplianceStatsOptionsFlow(config_entries.OptionsFlow):
             vol.Optional(
                 CONF_DELAY_ON,
                 default=data.get(CONF_DELAY_ON, DEFAULT_DELAY_ON),
-            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=36000)),
             vol.Optional(
                 CONF_DELAY_OFF,
                 default=data.get(CONF_DELAY_OFF, DEFAULT_DELAY_OFF),
-            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=36000)),
             vol.Optional(
                 CONF_UPDATE_INTERVAL,
                 default=data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL),
-            ): vol.All(vol.Coerce(int), vol.Range(min=5, max=3600)),
+            ): vol.All(vol.Coerce(int), vol.Range(min=5, max=36000)),
         }
 
         schema = vol.Schema(schema_fields)
